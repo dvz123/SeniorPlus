@@ -18,6 +18,7 @@ export const AuthProvider = ({ children }) => {
 
         if (token) {
           if (process.env.NODE_ENV === "development") {
+            // Modo demo: retorna usuário fixo
             setCurrentUser({
               id: "1",
               name: "Usuário Teste",
@@ -58,6 +59,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
 
       if (process.env.NODE_ENV === "development") {
+        // Simulação de login no modo demo
         const mockUser = {
           id: "1",
           name: "Usuário Teste",
@@ -76,6 +78,7 @@ export const AuthProvider = ({ children }) => {
         return mockUser;
       }
 
+      // Requisição real para backend
       const response = await api.post("/auth/login", { email, password });
       const { user, token } = response.data;
 
