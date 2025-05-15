@@ -9,6 +9,14 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Função para limpar tokens e estado
+  const clearAuthData = () => {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    api.setAuthToken(null);
+    setCurrentUser(null);
+  };
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -17,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
         if (token) {
           if (process.env.REACT_APP_MODE === "demo") {
-            // Modo demo: retorna usuário fixo
+            // Modo demo: usuário fixo
             setCurrentUser({
               id: "1",
               name: "Usuário Teste",
@@ -25,26 +33,16 @@ export const AuthProvider = ({ children }) => {
             });
             api.setAuthToken(token);
           } else {
-            try {
-              api.setAuthToken(token);
-              const response = await api.get("/auth/me");
-              setCurrentUser(response.data);
-            } catch (apiError) {
-              console.error("Erro ao obter dados do usuário:", apiError);
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-              api.setAuthToken(null);
-              setCurrentUser(null);
-            }
+            api.setAuthToken(token);
+            const response = await api.get("/auth/me");
+            setCurrentUser(response.data);
           }
         } else {
           setCurrentUser(null);
         }
-      } catch (error) {
-        console.error("Erro ao verificar autenticação:", error);
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
-        setCurrentUser(null);
+      } catch (apiError) {
+        console.error("Erro ao obter dados do usuário:", apiError);
+        clearAuthData();
       } finally {
         setLoading(false);
       }
@@ -53,12 +51,17 @@ export const AuthProvider = ({ children }) => {
     checkAuth();
   }, []);
 
+  /**
+   * Realiza login do usuário
+   * @param {string} email
+   * @param {string} password
+   * @param {boolean} rememberMe
+   */
   const login = async (email, password, rememberMe = false) => {
     try {
       setError(null);
 
       if (process.env.REACT_APP_MODE === "demo") {
-        // Simulação de login no modo demo
         const mockUser = {
           id: "1",
           name: "Usuário Teste",
@@ -66,11 +69,8 @@ export const AuthProvider = ({ children }) => {
         };
         const mockToken = "mock-jwt-token";
 
-        if (rememberMe) {
-          localStorage.setItem("token", mockToken);
-        } else {
-          sessionStorage.setItem("token", mockToken);
-        }
+        if (rememberMe) localStorage.setItem("token", mockToken);
+        else sessionStorage.setItem("token", mockToken);
 
         api.setAuthToken(mockToken);
         setCurrentUser(mockUser);
@@ -80,26 +80,21 @@ export const AuthProvider = ({ children }) => {
       const response = await api.post("/auth/login", { email, password });
       const { user, token } = response.data;
 
-      if (rememberMe) {
-        localStorage.setItem("token", token);
-      } else {
-        sessionStorage.setItem("token", token);
-      }
+      if (rememberMe) localStorage.setItem("token", token);
+      else sessionStorage.setItem("token", token);
 
       api.setAuthToken(token);
       setCurrentUser(user);
 
-      if (!user) {
-        localStorage.removeItem("token");
-        sessionStorage.removeItem("token");
-        api.setAuthToken(null);
-      }
+      if (!user) clearAuthData();
 
       return user;
-    } catch (error) {
-      console.error("Erro ao fazer login:", error);
-      setError(error.message || "Falha ao fazer login");
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao fazer login";
+      console.error("Erro ao fazer login:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
@@ -108,33 +103,29 @@ export const AuthProvider = ({ children }) => {
       setError(null);
 
       if (process.env.REACT_APP_MODE === "demo") {
-        const mockUser = { id: "1", name, email };
-        return mockUser;
+        return { id: "1", name, email };
       }
 
-      const response = await api.post("/auth/register", {
-        name,
-        email,
-        password,
-      });
+      const response = await api.post("/auth/register", { name, email, password });
       return response.data;
-    } catch (error) {
-      console.error("Erro ao registrar:", error);
-      setError(error.message || "Falha ao registrar");
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao registrar";
+      console.error("Erro ao registrar:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
   const logout = async () => {
     try {
-      localStorage.removeItem("token");
-      sessionStorage.removeItem("token");
-      api.setAuthToken(null);
-      setCurrentUser(null);
-    } catch (error) {
-      console.error("Erro ao fazer logout:", error);
-      setError(error.message || "Falha ao fazer logout");
-      throw error;
+      clearAuthData();
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao fazer logout";
+      console.error("Erro ao fazer logout:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
@@ -146,10 +137,12 @@ export const AuthProvider = ({ children }) => {
       }
       const response = await api.post("/auth/reset-password", { email });
       return response.data;
-    } catch (error) {
-      console.error("Erro ao solicitar redefinição de senha:", error);
-      setError(error.message || "Falha ao solicitar redefinição de senha");
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao solicitar redefinição de senha";
+      console.error("Erro ao solicitar redefinição de senha:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
@@ -164,10 +157,12 @@ export const AuthProvider = ({ children }) => {
         password: newPassword,
       });
       return response.data;
-    } catch (error) {
-      console.error("Erro ao confirmar redefinição de senha:", error);
-      setError(error.message || "Falha ao confirmar redefinição de senha");
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao confirmar redefinição de senha";
+      console.error("Erro ao confirmar redefinição de senha:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
@@ -186,10 +181,12 @@ export const AuthProvider = ({ children }) => {
       const updatedUser = response.data;
       setCurrentUser(updatedUser);
       return updatedUser;
-    } catch (error) {
-      console.error("Erro ao atualizar perfil:", error);
-      setError(error.message || "Falha ao atualizar perfil");
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao atualizar perfil";
+      console.error("Erro ao atualizar perfil:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
@@ -207,10 +204,12 @@ export const AuthProvider = ({ children }) => {
         newPassword,
       });
       return response.data;
-    } catch (error) {
-      console.error("Erro ao alterar senha:", error);
-      setError(error.message || "Falha ao alterar senha");
-      throw error;
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || err.message || "Falha ao alterar senha";
+      console.error("Erro ao alterar senha:", msg);
+      setError(msg);
+      throw err;
     }
   };
 
@@ -227,9 +226,7 @@ export const AuthProvider = ({ children }) => {
     changePassword,
   };
 
-  return (
-    <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

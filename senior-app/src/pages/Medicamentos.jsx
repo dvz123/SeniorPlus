@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useMedication } from "../contexts/MedicationContext"
-import { useToast } from "../contexts/ToastContext"
 import MedicationForm from "../components/MedicationForm"
 import MedicationHistoryForm from "../components/MedicationHistoryForm"
 import ConfirmDialog from "../components/ConfirmDialog"
@@ -9,7 +8,6 @@ import "../styles/Medicamentos.css"
 
 function Medicamentos() {
   const { medications, deleteMedication, getMedicationHistory } = useMedication()
-  const { showSuccess, showInfo } = useToast()
   const [activeTab, setActiveTab] = useState("active")
   const [showForm, setShowForm] = useState(false)
   const [editingMedication, setEditingMedication] = useState(null)
@@ -37,7 +35,6 @@ function Medicamentos() {
   const handleFormSubmit = (isEditing) => {
     setShowForm(false)
     setEditingMedication(null)
-    showSuccess(isEditing ? "Medicamento atualizado com sucesso!" : "Medicamento adicionado com sucesso!")
   }
 
   const handleFormCancel = () => {
@@ -57,7 +54,7 @@ function Medicamentos() {
   const handleConfirmDelete = () => {
     deleteMedication(confirmDialog.id)
     setConfirmDialog({ ...confirmDialog, isOpen: false })
-    showSuccess("Medicamento excluído com sucesso!")
+
   }
 
   const handleCancelDelete = () => {
@@ -72,7 +69,7 @@ function Medicamentos() {
   const handleHistoryFormSubmit = () => {
     setShowHistoryForm(false)
     setSelectedMedication(null)
-    showInfo("Registro de medicamento adicionado com sucesso!")
+
   }
 
   const handleViewHistoryClick = (medication) => {

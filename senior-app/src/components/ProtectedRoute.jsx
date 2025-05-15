@@ -1,16 +1,18 @@
 import { Navigate, useLocation } from "react-router-dom";
 import { useToast } from "../contexts/ToastContext";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 function ProtectedRoute({ children }) {
   const location = useLocation();
   const { showError } = useToast();
   const { loading, currentUser } = useAuth();
+  const hasShownError = useRef(false);
 
   useEffect(() => {
-    if (!loading && !currentUser) {
+    if (!loading && !currentUser && !hasShownError.current) {
       showError("Você precisa estar logado para acessar esta página.");
+      hasShownError.current = true; // Evita mostrar a mensagem várias vezes
     }
   }, [loading, currentUser, showError]);
 
@@ -19,12 +21,7 @@ function ProtectedRoute({ children }) {
   }
 
   if (!currentUser) {
-    return (
-      <>
-        <p>Usuário não autenticado. Você será redirecionado para o login.</p>
-        <Navigate to="/login" state={{ from: location }} replace />
-      </>
-    );
+    return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FaGoogle, FaFacebookF } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/Auth.css";
 
@@ -14,6 +14,10 @@ function Login() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Rota para redirecionar após login; padrão é "/"
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,10 +32,10 @@ function Login() {
 
     try {
       await login(email, password, rememberMe);
-      navigate("/");
-    } catch (err) {
-      setError("Falha ao fazer login. Verifique suas credenciais.");
-    } finally {
+      navigate(from, { replace: true });
+    } catch (error) {
+      const message = error?.response?.data?.message || "Falha ao fazer login";
+      setError(message);
       setIsLoading(false);
     }
   };
@@ -245,9 +249,7 @@ function Login() {
 
         <p className="auth-register-text">
           Ainda não tem uma conta?{" "}
-          <Link to="/registrar" className="auth-register-link">
-            Cadastre-se
-          </Link>
+          <Link to="/registrar">Cadastre-se</Link>
         </p>
       </div>
     </div>

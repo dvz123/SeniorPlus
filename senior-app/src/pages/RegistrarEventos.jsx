@@ -1,14 +1,13 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useEvents } from "../contexts/EventsContext"
-import { useToast } from "../contexts/ToastContext"
+
 import EventForm from "../components/EventForm"
 import ConfirmDialog from "../components/ConfirmDialog"
 import "../styles/RegistrarEventos.css"
 
 function RegistrarEventos() {
   const { events, deleteEvent } = useEvents()
-  const { showSuccess } = useToast()
   const [showForm, setShowForm] = useState(false)
   const [editingEvent, setEditingEvent] = useState(null)
   const [filter, setFilter] = useState("all")
@@ -36,7 +35,7 @@ function RegistrarEventos() {
   const handleFormSubmit = (isEditing) => {
     setShowForm(false)
     setEditingEvent(null)
-    showSuccess(isEditing ? "Evento atualizado com sucesso!" : "Evento adicionado com sucesso!")
+    
   }
 
   const handleFormCancel = () => {
@@ -56,7 +55,7 @@ function RegistrarEventos() {
   const handleConfirmDelete = () => {
     deleteEvent(confirmDialog.id)
     setConfirmDialog({ ...confirmDialog, isOpen: false })
-    showSuccess("Evento excluído com sucesso!")
+    
   }
 
   const handleCancelDelete = () => {

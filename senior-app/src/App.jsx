@@ -18,7 +18,6 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { NotificationProvider } from "./contexts/NotificationContext";
 
 import ProtectedRoute from "./components/ProtectedRoute";
-import ToastContainer from "./components/ToastContainer";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 
@@ -39,13 +38,13 @@ import "./styles/global.css";
 
 function AppWrapper() {
   return (
-    <ThemeProvider>
-      <ToastProvider>
+    <ToastProvider>
+      <ThemeProvider>
         <Router>
           <AppContent />
         </Router>
-      </ToastProvider>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ToastProvider>
   );
 }
 
@@ -67,7 +66,6 @@ function AppContent() {
         <EventsProvider>
           <MedicationProvider>
             <NotificationProvider>
-              <ToastContainer />
               {!shouldHideLayout && <Header toggleSidebar={toggleSidebar} />}
               {!shouldHideLayout && (
                 <Sidebar isOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
