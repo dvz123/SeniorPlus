@@ -2,7 +2,6 @@ import { createContext, useState, useContext, useEffect } from "react";
 import { api } from "../services/api";
 
 const AuthContext = createContext();
-
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
@@ -17,7 +16,7 @@ export const AuthProvider = ({ children }) => {
           localStorage.getItem("token") || sessionStorage.getItem("token");
 
         if (token) {
-          if (process.env.NODE_ENV === "development") {
+          if (process.env.REACT_APP_MODE === "demo") {
             // Modo demo: retorna usuário fixo
             setCurrentUser({
               id: "1",
@@ -58,7 +57,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
 
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.REACT_APP_MODE === "demo") {
         // Simulação de login no modo demo
         const mockUser = {
           id: "1",
@@ -78,7 +77,6 @@ export const AuthProvider = ({ children }) => {
         return mockUser;
       }
 
-      // Requisição real para backend
       const response = await api.post("/auth/login", { email, password });
       const { user, token } = response.data;
 
@@ -109,7 +107,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setError(null);
 
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.REACT_APP_MODE === "demo") {
         const mockUser = { id: "1", name, email };
         return mockUser;
       }
@@ -143,7 +141,7 @@ export const AuthProvider = ({ children }) => {
   const resetPassword = async (email) => {
     try {
       setError(null);
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.REACT_APP_MODE === "demo") {
         return { success: true };
       }
       const response = await api.post("/auth/reset-password", { email });
@@ -158,7 +156,7 @@ export const AuthProvider = ({ children }) => {
   const confirmPasswordReset = async (token, newPassword) => {
     try {
       setError(null);
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.REACT_APP_MODE === "demo") {
         return { success: true };
       }
       const response = await api.post("/auth/confirm-reset-password", {
@@ -178,7 +176,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       if (!currentUser) throw new Error("Usuário não autenticado");
 
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.REACT_APP_MODE === "demo") {
         const updatedUser = { ...currentUser, ...userData };
         setCurrentUser(updatedUser);
         return updatedUser;
@@ -200,7 +198,7 @@ export const AuthProvider = ({ children }) => {
       setError(null);
       if (!currentUser) throw new Error("Usuário não autenticado");
 
-      if (process.env.NODE_ENV === "development") {
+      if (process.env.REACT_APP_MODE === "demo") {
         return { success: true };
       }
 

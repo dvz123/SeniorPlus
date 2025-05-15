@@ -525,11 +525,14 @@ body {
 
 .auth-social-text::before {
   left: 0;
+  transform: translateY(-50%);
 }
 
 .auth-social-text::after {
   right: 0;
+  transform: translateY(-50%);
 }
+
 
 .dark-mode .auth-social-text::before,
 .dark-mode .auth-social-text::after {
