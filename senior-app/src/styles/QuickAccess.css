@@ -1,0 +1,86 @@
+.quick-access-section {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+
+.quick-access-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1e293b;
+  padding-left: 8px;
+  border-left: 3px solid #0aa174;
+}
+
+.dark-mode .quick-access-title {
+  color: #f1f5f9;
+}
+
+.quick-access-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .quick-access-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .quick-access-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.quick-access-button {
+  height: auto;
+  padding: 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #0aa174;
+  color: white;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  border: none;
+  box-shadow: 0 4px 6px rgba(10, 161, 116, 0.2);
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  text-align: center;
+}
+
+.quick-access-button:hover {
+  background-color: #088f66;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(10, 161, 116, 0.25);
+}
+
+.quick-access-icon {
+  height: 24px;
+  width: 24px;
+  color: white;
+}
+
+.quick-access-label {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.quick-access-button span {
+  color: white;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.emergency-button {
+  background-color: #ef4444;
+}
+
+.emergency-button:hover {
+  background-color: #dc2626;
+  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
+}

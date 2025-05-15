@@ -1,0 +1,226 @@
+/* === Botão do sino: como você pediu, mantido 100% === */
+.notification-bell-button {
+  background-color: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  padding: 0;
+  position: relative;
+}
+
+.notification-bell-button:hover {
+  background-color: #f1f5f9;
+  color: #0aa174;
+}
+
+.notification-bell-button.has-unread {
+  background-color: #e0f2f1;
+  color: #03583f;
+}
+
+.notification-bell-icon {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  transition: transform 0.3s ease;
+}
+
+.notification-bell-button:hover .notification-bell-icon {
+  transform: rotate(20deg);
+}
+
+/* === Badge de quantidade === */
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background-color: #d62828;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 9999px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* === Painel de notificações === */
+.notification-panel {
+  position: absolute;
+  top: 120%;
+  right: 0;
+  width: 360px;
+  max-height: 70vh;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  z-index: 1000;
+  overflow: hidden;
+  animation: slideFadeDown 0.3s ease;
+}
+
+/* Animação suave */
+@keyframes slideFadeDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cabeçalho */
+.notification-header {
+  padding: 16px;
+  background-color: #f9fafb;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.notification-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #03583f;
+  margin: 0;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.notification-action-button {
+  background: none;
+  border: none;
+  color: #03583f;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: background-color 0.2s;
+}
+
+.notification-action-button:hover {
+  background-color: #e6f4f1;
+}
+
+/* Permissão */
+.notification-permission {
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: #444;
+  background-color: #fef9ef;
+  border-top: 1px solid #fae2b6;
+  border-bottom: 1px solid #fae2b6;
+}
+
+.notification-permission-button {
+  margin-top: 8px;
+  background-color: #03583f;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.notification-permission-button:hover {
+  background-color: #027252;
+}
+
+/* Lista de notificações */
+.notification-list {
+  display: flex;
+  flex-direction: column;
+  max-height: 50vh;
+  overflow-y: auto;
+}
+
+/* Item de notificação */
+.notification-item {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  border-bottom: 1px solid #f1f5f9;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.notification-item:hover {
+  background-color: #f0fdfa;
+}
+
+.notification-unread {
+  background-color: #e6f7f3;
+  border-left: 4px solid #03583f;
+}
+
+/* Conteúdo */
+.notification-icon-container {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notification-content {
+  flex: 1;
+}
+
+.notification-title {
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 4px;
+  font-size: 0.95rem;
+}
+
+.notification-message {
+  font-size: 0.85rem;
+  color: #444;
+  line-height: 1.4;
+}
+
+.notification-time {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* Botão de remover */
+.notification-remove {
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  padding: 2px;
+  align-self: start;
+  transition: color 0.2s ease;
+}
+
+.notification-remove:hover {
+  color: #d62828;
+}
+
+/* Mensagem de vazio */
+.notification-empty {
+  padding: 24px;
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.notification-empty-icon {
+  margin-bottom: 8px;
+  stroke: #ccc;
+}
