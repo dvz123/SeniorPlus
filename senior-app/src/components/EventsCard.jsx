@@ -5,7 +5,7 @@ import EventForm from "./EventForm"
 import "../styles/EventsCard.css"
 
 function EventsCard() {
-  const { getTodayEvents, deleteEvent } = useEvents()
+  const { getTodayEvents } = useEvents()
   const [showForm, setShowForm] = useState(false)
   const navigate = useNavigate()
 
