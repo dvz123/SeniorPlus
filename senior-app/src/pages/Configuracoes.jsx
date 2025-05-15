@@ -354,7 +354,7 @@ function Configuracoes() {
                 <div className="settings-option-info">
                   <div className="settings-option-label">Termos de Uso</div>
                   <div className="settings-option-description">
-                    <a href="#" className="settings-link">
+                    <a href="none" className="settings-link">
                       Visualizar Termos de Uso
                     </a>
                   </div>
@@ -365,7 +365,7 @@ function Configuracoes() {
                 <div className="settings-option-info">
                   <div className="settings-option-label">Política de Privacidade</div>
                   <div className="settings-option-description">
-                    <a href="#" className="settings-link">
+                    <a href="none" className="settings-link">
                       Visualizar Política de Privacidade
                     </a>
                   </div>

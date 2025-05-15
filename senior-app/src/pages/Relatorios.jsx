@@ -11,7 +11,7 @@ function Relatorios() {
   const { medications = [], medicationHistory = [] } = useMedication()
   const { user } = useUser()
   const { showToast } = useToast()
-  const [reportType, setReportType] = useState("events")
+  // const [setReportType] = useState("events")
   const [chartType, setChartType] = useState("bar")
   const [dateRange, setDateRange] = useState({
     start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
@@ -26,9 +26,9 @@ function Relatorios() {
   const medicationChartRef = useRef(null)
   const adherenceChartRef = useRef(null)
 
-  const handleReportTypeChange = (e) => {
-    setReportType(e.target.value)
-  }
+  // const handleReportTypeChange = (e) => {
+  //   setReportType(e.target.value)
+  // }
 
   const handleChartTypeChange = (e) => {
     setChartType(e.target.value)
@@ -211,9 +211,10 @@ function Relatorios() {
   useEffect(() => {
     if (activeTab === "eventos") {
       renderEventCharts()
+      
     } else if (activeTab === "medicamentos") {
       renderMedicationCharts()
-    }
+    }// eslint-disable-next-line
   }, [activeTab, chartType, categoryStats, dateRange, medicationHistory])
 
   // Render event charts
