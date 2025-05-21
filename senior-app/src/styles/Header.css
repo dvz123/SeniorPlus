@@ -36,10 +36,11 @@
 
 .logo {
   color: #0aa174;
-  font-size: 24px;
+  font-size: 30px;
   font-weight: 700;
   letter-spacing: 0.5px;
   margin: 0;
+  font-family: 'Dancing Script';
 }
 
 .header-actions {

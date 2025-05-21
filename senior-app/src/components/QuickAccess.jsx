@@ -6,6 +6,25 @@ function QuickAccess() {
     <div className="quick-access-section">
       <h2 className="quick-access-title">Acesso rápido</h2>
       <div className="quick-access-grid">
+
+        <Link to="/emergencia" className="quick-access-button emergency-button">
+          <svg
+            className="quick-access-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+          </svg>
+          <span>Emergência</span>
+        </Link>
+
         <Link to="/atualizar-dados" className="quick-access-button">
           <svg
             className="quick-access-icon"
@@ -90,11 +109,12 @@ function QuickAccess() {
             <line x1="3" x2="21" y1="10" y2="10" />
             <line x1="3" x2="21" y1="16" y2="16" />
           </svg>
-          <span>Calendário</span>
+          <span>Agenda</span>
         </Link>
-        
+
         <Link to="/registrar-eventos" className="quick-access-button" >
           <svg
+            className="quick-access-icon"
             xmlns="http://www.w3.org/2000/svg"
             width="24"
             height="24"
@@ -111,24 +131,6 @@ function QuickAccess() {
             <line x1="3" x2="21" y1="10" y2="10" />
           </svg>
           <span>Registrar Eventos</span>
-        </Link>
-
-        <Link to="/emergencia" className="quick-access-button emergency-button">
-          <svg
-            className="quick-access-icon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-          </svg>
-          <span>Emergência</span>
         </Link>
 
         <Link to="/configuracoes" className="quick-access-button">

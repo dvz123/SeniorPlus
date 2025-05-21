@@ -9,7 +9,7 @@
 }
 
 /* Dark mode */
-.dark .profile-card {
+.dark-mode .profile-card {
   background-color: #1e293b; /* fundo escuro */
   color: #cbd5e1; /* texto claro */
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
@@ -23,7 +23,7 @@
   gap: 16px;
   padding: 20px 24px 12px;
 }
-y
+
 .profile-avatar {
   height: 64px;
   width: 64px;
@@ -38,7 +38,7 @@ y
   justify-content: center;
 }
 
-.dark .profile-avatar {
+.dark-mode .profile-avatar {
   border-color: #475569; /* borda mais escura no modo dark */
 }
 
@@ -62,7 +62,7 @@ y
   border-radius: 50%;
 }
 
-.dark .profile-avatar-fallback {
+.dark-mode .profile-avatar-fallback {
   background-color: #0aa174;
   color: #e6f7f2;
 }
@@ -74,7 +74,7 @@ y
   margin: 0;
 }
 
-.dark .profile-name {
+.dark-mode .profile-name {
   color: #cbd5e1;
 }
 
@@ -84,7 +84,7 @@ y
   margin: 4px 0 0;
 }
 
-.dark .profile-id {
+.dark-mode .profile-id {
   color: #94a3b8;
 }
 
@@ -109,7 +109,7 @@ y
   font-size: 14px;
 }
 
-.dark .profile-label {
+.dark-mode .profile-label {
   color: #94a3b8;
 }
 
@@ -118,7 +118,7 @@ y
   color: #1e293b;
 }
 
-.dark .profile-value {
+.dark-mode .profile-value {
   color: #cbd5e1;
 }
 
@@ -137,7 +137,7 @@ y
   padding: 4px 8px;
 }
 
-.dark .allergy-badge {
+.dark-mode .allergy-badge {
   background-color: #7f1d1d; /* vermelho escuro */
   color: #fecaca; /* vermelho claro */
 }

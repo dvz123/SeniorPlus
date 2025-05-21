@@ -130,7 +130,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
                 <line x1="3" x2="21" y1="10" y2="10" />
                 <line x1="3" x2="21" y1="16" y2="16" />
               </svg>
-              Calendário
+              Agenda
             </Link>
             <Link to="/relatorios" className="nav-item" onClick={toggleSidebar}>
               <svg

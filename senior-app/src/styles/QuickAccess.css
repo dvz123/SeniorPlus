@@ -84,3 +84,39 @@
   background-color: #dc2626;
   box-shadow: 0 6px 12px rgba(239, 68, 68, 0.25);
 }
+
+/* Modo escuro para o título */
+.dark-mode .quick-access-title {
+  color: #f1f5f9;
+  border-left-color: #0aa174;
+}
+
+/* Modo escuro para botões padrão (grafite elegante) */
+.dark-mode .quick-access-button {
+  background-color: #1f2937; /* Grafite escuro */
+  color: #f1f5f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .quick-access-button:hover {
+  background-color: #111827; /* Preto mais intenso */
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* Ícones e textos no botão */
+.dark-mode .quick-access-icon,
+.dark-mode .quick-access-button span,
+.dark-mode .quick-access-label {
+  color: #f1f5f9;
+}
+
+/* Botão de emergência no modo escuro */
+.dark-mode .emergency-button {
+  background-color: #7f1d1d;
+}
+
+.dark-mode .emergency-button:hover {
+  background-color: #991b1b;
+  box-shadow: 0 6px 12px rgba(239, 68, 68, 0.3);
+}

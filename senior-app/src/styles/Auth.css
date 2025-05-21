@@ -324,11 +324,12 @@ body {
 
 .auth-logo-text {
   color: var(--primary-color);
-  font-size: 28px;
+  font-size: 40px;
   font-weight: 700;
   margin: 0;
   letter-spacing: 0.5px;
   text-shadow: 0 2px 4px rgba(10, 161, 116, 0.1);
+  font-family: 'Dancing Script';
 }
 
 .auth-title {
@@ -543,6 +544,8 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+  padding-top: 20px;
+  padding-bottom: 15px;
 }
 
 .auth-social-button {
