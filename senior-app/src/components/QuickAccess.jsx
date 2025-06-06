@@ -6,7 +6,6 @@ function QuickAccess() {
     <div className="quick-access-section">
       <h2 className="quick-access-title">Acesso rápido</h2>
       <div className="quick-access-grid">
-
         <Link to="/emergencia" className="quick-access-button emergency-button">
           <svg
             className="quick-access-icon"
@@ -57,13 +56,8 @@ function QuickAccess() {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
-            <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z" />
-            <path d="m5 2 5 5" />
-            <path d="M2 13h7" />
-            <path d="M22 20v2h-2" />
-            <path d="M20 14v4h-4" />
-            <path d="M13 20h-2" />
-            <path d="M16 14h-3" />
+            <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+            <path d="m8.5 8.5 7 7" />
           </svg>
           <span>Gerenciar medicamentos</span>
         </Link>
@@ -112,7 +106,7 @@ function QuickAccess() {
           <span>Agenda</span>
         </Link>
 
-        <Link to="/registrar-eventos" className="quick-access-button" >
+        <Link to="/registrar-eventos" className="quick-access-button">
           <svg
             className="quick-access-icon"
             xmlns="http://www.w3.org/2000/svg"
@@ -151,7 +145,6 @@ function QuickAccess() {
           </svg>
           <span>Configurações</span>
         </Link>
-
       </div>
     </div>
   )

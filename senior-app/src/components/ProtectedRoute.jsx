@@ -1,30 +1,49 @@
-import { Navigate, useLocation } from "react-router-dom";
-import { useToast } from "../contexts/ToastContext";
-import { useAuth } from "../contexts/AuthContext";
-import { useEffect, useRef } from "react";
+"use client"
+
+import { Navigate, useLocation } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
 
 function ProtectedRoute({ children }) {
-  const location = useLocation();
-  const { showError } = useToast();
-  const { loading, currentUser } = useAuth();
-  const hasShownError = useRef(false);
+  const { currentUser, loading } = useAuth()
+  const location = useLocation()
 
-  useEffect(() => {
-    if (!loading && !currentUser && !hasShownError.current) {
-      showError("Você precisa estar logado para acessar esta página.");
-      hasShownError.current = true; // Evita mostrar a mensagem várias vezes
-    }
-  }, [loading, currentUser, showError]);
-
+  // Mostrar loading enquanto verifica autenticação
   if (loading) {
-    return <div className="carregando">Carregando...</div>;
+    return (
+      <div
+        className="loading-container"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          flexDirection: "column",
+          gap: "1rem",
+        }}
+      >
+        <div
+          className="loading-spinner"
+          style={{
+            width: "40px",
+            height: "40px",
+            border: "4px solid #f3f3f3",
+            borderTop: "4px solid #007bff",
+            borderRadius: "50%",
+            animation: "spin 1s linear infinite",
+          }}
+        ></div>
+        <p>Carregando...</p>
+      </div>
+    )
   }
 
+  // Se não estiver logado, redireciona para login salvando a localização atual
   if (!currentUser) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to="/login" state={{ from: location }} replace />
   }
 
-  return children;
+  // Se estiver logado, renderiza o componente
+  return children
 }
 
-export default ProtectedRoute;
+export default ProtectedRoute

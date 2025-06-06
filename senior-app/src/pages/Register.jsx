@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import "../styles/Auth.css"
@@ -71,11 +73,46 @@ function Register() {
         <h2 className="auth-title">Crie sua conta</h2>
         <p className="auth-subtitle">Registre-se para começar a usar o Senior+</p>
 
-        {error && <div className="auth-error">{error}</div>}
+        {error && (
+          <div className="auth-error" role="alert">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" x2="12" y1="8" y2="12" />
+              <line x1="12" x2="12.01" y1="16" y2="16" />
+            </svg>
+            {error}
+          </div>
+        )}
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-form-group">
-            <label htmlFor="name">Nome completo</label>
+            <label htmlFor="name">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Nome completo
+            </label>
             <div className="auth-input-wrapper">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -99,12 +136,29 @@ function Register() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
+                className="auth-input"
               />
             </div>
           </div>
 
           <div className="auth-form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              Email
+            </label>
             <div className="auth-input-wrapper">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -128,12 +182,29 @@ function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="auth-input"
               />
             </div>
           </div>
 
           <div className="auth-form-group">
-            <label htmlFor="password">Senha</label>
+            <label htmlFor="password">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Senha
+            </label>
             <div className="auth-input-wrapper">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -157,8 +228,14 @@ function Register() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="auth-input"
               />
-              <button type="button" className="auth-password-toggle" onClick={() => setShowPassword(!showPassword)}>
+              <button
+                type="button"
+                className="auth-password-toggle"
+                onClick={() => setShowPassword(!showPassword)}
+                aria-label={showPassword ? "Esconder senha" : "Mostrar senha"}
+              >
                 {showPassword ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -197,7 +274,23 @@ function Register() {
           </div>
 
           <div className="auth-form-group">
-            <label htmlFor="confirm-password">Confirmar senha</label>
+            <label htmlFor="confirm-password">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Confirmar senha
+            </label>
             <div className="auth-input-wrapper">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -221,13 +314,14 @@ function Register() {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                className="auth-input"
               />
             </div>
           </div>
 
           <button type="submit" className="auth-button" disabled={isLoading}>
             {isLoading ? (
-              <>
+              <div className="auth-loading">
                 <svg
                   className="auth-spinner"
                   xmlns="http://www.w3.org/2000/svg"
@@ -240,24 +334,22 @@ function Register() {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                 >
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                  <path d="M21 12a9 9 0 11-6.219-8.56" />
                 </svg>
                 Registrando...
-              </>
+              </div>
             ) : (
               "Registrar"
             )}
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>
-            Já tem uma conta?{" "}
-            <Link to="/login" className="auth-link">
-              Faça login
-            </Link>
-          </p>
-        </div>
+        <p className="auth-register-text">
+          Já tem uma conta?{" "}
+          <Link to="/login" className="auth-link">
+            Faça login
+          </Link>
+        </p>
       </div>
     </div>
   )

@@ -1,44 +1,46 @@
-import { useState } from "react";
-import { FaGoogle, FaFacebookF } from "react-icons/fa";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import "../styles/Auth.css";
+"use client"
+
+import { useState } from "react"
+import { FaGoogle, FaFacebookF } from "react-icons/fa"
+import { Link, useNavigate, useLocation } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
+import "../styles/Auth.css"
 
 function Login() {
-  const { login } = useAuth();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { login } = useAuth()
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [rememberMe, setRememberMe] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
-  const navigate = useNavigate();
-  const location = useLocation();
+  const navigate = useNavigate()
+  const location = useLocation()
 
   // Rota para redirecionar após login; padrão é "/"
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname || "/dashboard"
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+    e.preventDefault()
+    setError("")
 
     if (!email || !password) {
-      setError("Por favor, preencha todos os campos.");
-      return;
+      setError("Por favor, preencha todos os campos.")
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-      await login(email, password, rememberMe);
-      navigate(from, { replace: true });
+      await login(email, password, rememberMe)
+      navigate(from, { replace: true })
     } catch (error) {
-      const message = error?.response?.data?.message || "Falha ao fazer login";
-      setError(message);
-      setIsLoading(false);
+      const message = error?.response?.data?.message || "Falha ao fazer login"
+      setError(message)
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="auth-container">
@@ -127,6 +129,7 @@ function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="auth-input"
               />
             </div>
           </div>
@@ -172,6 +175,7 @@ function Login() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                className="auth-input"
               />
               <button
                 type="button"
@@ -226,34 +230,59 @@ function Login() {
               />
               <label htmlFor="remember-me">Lembrar-me</label>
             </div>
-            <Link to="/esqueci" className="auth-forgot-link">
+            <Link to="/esqueci" className="auth-forgot-password">
               Esqueci a senha
             </Link>
           </div>
 
           <button type="submit" className="auth-button" disabled={isLoading}>
-            {isLoading ? "Entrando..." : "Entrar"}
+            {isLoading ? (
+              <div className="auth-loading">
+                <svg
+                  className="auth-spinner"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 12a9 9 0 11-6.219-8.56" />
+                </svg>
+                Entrando...
+              </div>
+            ) : (
+              "Entrar"
+            )}
           </button>
         </form>
 
-        <div className="auth-social-buttons">
-          <button className="auth-social-button google" type="button">
-            <FaGoogle size={20} style={{ marginRight: "8px" }} />
-            Google
-          </button>
-          <button className="auth-social-button facebook" type="button">
-            <FaFacebookF size={20} style={{ marginRight: "8px" }} />
-            Facebook
-          </button>
+        <div className="auth-social-login">
+          <div className="auth-social-text">ou continue com</div>
+          <div className="auth-social-buttons">
+            <button className="auth-social-button google" type="button">
+              <FaGoogle size={20} />
+              Google
+            </button>
+            <button className="auth-social-button facebook" type="button">
+              <FaFacebookF size={20} />
+              Facebook
+            </button>
+          </div>
         </div>
 
         <p className="auth-register-text">
           Ainda não tem uma conta?{" "}
-          <Link to="/registrar">Cadastre-se</Link>
+          <Link to="/registrar" className="auth-link">
+            Cadastre-se
+          </Link>
         </p>
       </div>
     </div>
-  );
+  )
 }
 
-export default Login;
+export default Login

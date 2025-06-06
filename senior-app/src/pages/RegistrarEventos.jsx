@@ -1,3 +1,5 @@
+"use client"
+
 import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useEvents } from "../contexts/EventsContext"
@@ -35,7 +37,6 @@ function RegistrarEventos() {
   const handleFormSubmit = (isEditing) => {
     setShowForm(false)
     setEditingEvent(null)
-    
   }
 
   const handleFormCancel = () => {
@@ -55,7 +56,6 @@ function RegistrarEventos() {
   const handleConfirmDelete = () => {
     deleteEvent(confirmDialog.id)
     setConfirmDialog({ ...confirmDialog, isOpen: false })
-    
   }
 
   const handleCancelDelete = () => {
@@ -107,8 +107,9 @@ function RegistrarEventos() {
   }, {})
 
   const formatDate = (dateString) => {
+    const date = new Date(dateString)
     const options = { weekday: "long", year: "numeric", month: "long", day: "numeric" }
-    return new Date(dateString).toLocaleDateString("pt-BR", options)
+    return date.toLocaleDateString("pt-BR", options)
   }
 
   return (

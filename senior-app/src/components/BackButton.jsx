@@ -1,15 +1,50 @@
-import { useNavigate } from "react-router-dom"
+"use client"
+import { useNavigate, useLocation } from "react-router-dom"
+import { useAuth } from "../contexts/AuthContext"
 import "../styles/BackButton.css"
 
 function BackButton() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { currentUser } = useAuth()
 
   const handleBack = () => {
-    navigate(-1)
+    // Se o usuário não está logado, volta para a landing page
+    if (!currentUser) {
+      navigate("/")
+      return
+    }
+
+    // Se está logado, implementa lógica inteligente de navegação
+    const currentPath = location.pathname
+
+    // Mapeamento de onde cada página deve voltar
+    const backNavigation = {
+      "/dashboard": "/dashboard", // Dashboard não volta para lugar nenhum
+      "/home": "/dashboard",
+      "/atualizar-dados": "/dashboard",
+      "/medicamentos": "/dashboard",
+      "/registrar-eventos": "/dashboard",
+      "/relatorios": "/dashboard",
+      "/calendario": "/dashboard",
+      "/configuracoes": "/dashboard",
+      "/emergencia": "/dashboard",
+    }
+
+    // Determina para onde voltar
+    const backTo = backNavigation[currentPath] || "/dashboard"
+
+    // Se já está no dashboard, não faz nada
+    if (currentPath === "/dashboard" && backTo === "/dashboard") {
+      return
+    }
+
+    // Navega para o destino correto
+    navigate(backTo)
   }
 
   return (
-    <button className="back-button" onClick={handleBack}>
+    <button className="back-button" onClick={handleBack} aria-label="Voltar">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="20"

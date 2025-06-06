@@ -1,101 +1,185 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import { useToast } from "../contexts/ToastContext";
-import "../styles/Auth.css";
+"use client"
+
+import { useState } from "react"
+import { Link } from "react-router-dom"
+import "../styles/Auth.css"
 
 function ForgotPassword() {
-  const [email, setEmail] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-
-  const { resetPassword } = useAuth();
-  const { showSuccess, showError } = useToast();
+  const [email, setEmail] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [message, setMessage] = useState("")
+  const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess(false);
+    e.preventDefault()
+    setError("")
+    setMessage("")
 
     if (!email) {
-      setError("Por favor, informe seu email.");
-      return;
+      setError("Por favor, digite seu email.")
+      return
     }
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     try {
-      await resetPassword(email);
-      setSuccess(true);
-      showSuccess("Email de recuperação enviado com sucesso!");
-    } catch (err) {
-      console.error("Erro ao enviar email de recuperação:", err);
-      setError(err.message || "Falha ao enviar email de recuperação. Tente novamente.");
-      showError("Falha ao enviar email de recuperação. Tente novamente.");
-    } finally {
-      setIsLoading(false);
+      // Simulação de envio de email para desenvolvimento
+      setTimeout(() => {
+        setMessage("Se o email existir em nossa base, você receberá instruções para redefinir sua senha.")
+        setIsLoading(false)
+      }, 1000)
+    } catch (error) {
+      setError("Falha ao enviar email. Tente novamente.")
+      setIsLoading(false)
     }
-  };
+  }
 
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <div className="auth-header">
-          <h1 className="auth-title">Recuperar senha</h1>
-          <p className="auth-subtitle">
-            Digite seu email abaixo para receber instruções de redefinição.
-          </p>
+        <div className="auth-logo">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="auth-logo-icon"
+          >
+            <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+          </svg>
+          <h1 className="auth-logo-text">Senior+</h1>
         </div>
 
+        <h2 className="auth-title">Esqueci minha senha</h2>
+        <p className="auth-subtitle">Digite seu email para receber instruções de redefinição</p>
+
         {error && (
-          <div className="auth-message error">
-            <span>❌ {error}</span>
+          <div className="auth-error" role="alert">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" x2="12" y1="8" y2="12" />
+              <line x1="12" x2="12.01" y1="16" y2="16" />
+            </svg>
+            {error}
           </div>
         )}
-        {success && (
-          <div className="auth-message success">
-            <span>✅ Email enviado com sucesso! Verifique sua caixa de entrada.</span>
+
+        {message && (
+          <div className="auth-success" role="alert">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 12l2 2 4-4" />
+              <circle cx="12" cy="12" r="10" />
+            </svg>
+            {message}
           </div>
         )}
 
         <form className="auth-form" onSubmit={handleSubmit}>
           <div className="auth-form-group">
-            <label htmlFor="email" className="auth-label">Email</label>
-            <div className="auth-input-container">
-              <svg className="auth-input-icon" /* ícone email */ xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><rect width="20" height="16" x="2" y="4" rx="2" /><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" /></svg>
+            <label htmlFor="email">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
+              Email
+            </label>
+            <div className="auth-input-wrapper">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="auth-input-icon"
+              >
+                <rect width="20" height="16" x="2" y="4" rx="2" />
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+              </svg>
               <input
                 type="email"
                 id="email"
-                className="auth-input"
                 placeholder="seu@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
+                className="auth-input"
               />
             </div>
           </div>
 
           <button type="submit" className="auth-button" disabled={isLoading}>
             {isLoading ? (
-              <span className="auth-loading">
-                <svg className="auth-loading-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+              <div className="auth-loading">
+                <svg
+                  className="auth-spinner"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M21 12a9 9 0 11-6.219-8.56" />
+                </svg>
                 Enviando...
-              </span>
+              </div>
             ) : (
               "Enviar instruções"
             )}
           </button>
         </form>
 
-        <div className="auth-footer">
-          <p>
-            Lembrou sua senha? <Link to="/login" className="auth-link">Voltar para o login</Link>
-          </p>
-        </div>
+        <p className="auth-register-text">
+          Lembrou da senha?{" "}
+          <Link to="/login" className="auth-link">
+            Voltar ao login
+          </Link>
+        </p>
       </div>
     </div>
-  );
+  )
 }
 
-export default ForgotPassword;
+export default ForgotPassword

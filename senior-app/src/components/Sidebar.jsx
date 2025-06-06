@@ -1,7 +1,13 @@
+"use client"
+
 import { Link } from "react-router-dom"
 import "../styles/Sidebar.css"
+import { useState } from "react"
+import ChatModal from "./ChatModal"
 
 function Sidebar({ isOpen, toggleSidebar }) {
+  const [isChatOpen, setIsChatOpen] = useState(false)
+
   return (
     <>
       <div className={`sidebar-overlay ${isOpen ? "active" : ""}`} onClick={toggleSidebar}></div>
@@ -73,6 +79,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
             </Link>
             <Link to="/medicamentos" className="nav-item" onClick={toggleSidebar}>
               <svg
+                className="quick-access-icon"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -83,13 +90,8 @@ function Sidebar({ isOpen, toggleSidebar }) {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                <path d="m19 11-8-8-8.6 8.6a2 2 0 0 0 0 2.8l5.2 5.2c.8.8 2 .8 2.8 0L19 11Z" />
-                <path d="m5 2 5 5" />
-                <path d="M2 13h7" />
-                <path d="M22 20v2h-2" />
-                <path d="M20 14v4h-4" />
-                <path d="M13 20h-2" />
-                <path d="M16 14h-3" />
+                <path d="m10.5 20.5 10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7Z" />
+                <path d="m8.5 8.5 7 7" />
               </svg>
               Medicamentos
             </Link>
@@ -168,6 +170,22 @@ function Sidebar({ isOpen, toggleSidebar }) {
               </svg>
               Emergência
             </Link>
+            <div className="nav-item chat-nav-item" onClick={() => setIsChatOpen(true)}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+              Chat
+            </div>
             <Link to="/configuracoes" className="nav-item" onClick={toggleSidebar}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -206,6 +224,7 @@ function Sidebar({ isOpen, toggleSidebar }) {
           </nav>
         </div>
       </div>
+      <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </>
   )
 }
