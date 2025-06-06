@@ -144,19 +144,24 @@
   color: var(--text-secondary);
 }
 
-.nav-item:hover svg {
-  color: var(--primary-color);
-}
-
-.nav-item.logout {
-  margin-top: 24px;
-  color: var(--danger-color);
+.sidebar-nav .nav-item.logout {
+  margin-top: auto;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem;
+  color: #dc2626;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.nav-item.logout svg {
-  color: var(--danger-color);
+.sidebar-nav .nav-item.logout:hover {
+  background-color: #fee2e2;
+  color: #b91c1c;
 }
+
+.sidebar-nav .nav-item.logout svg {
+  color: #dc2626;
+}
+
 
 .nav-item.logout:hover {
   background-color: var(--danger-light);

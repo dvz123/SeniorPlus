@@ -1,232 +1,127 @@
-import { createContext, useState, useContext, useEffect } from "react";
-import { api } from "../services/api";
+"use client"
 
-const AuthContext = createContext();
-export const useAuth = () => useContext(AuthContext);
+import { createContext, useContext, useState, useEffect } from "react"
+
+const AuthContext = createContext()
+
+export const useAuth = () => {
+  const context = useContext(AuthContext)
+  if (!context) {
+    throw new Error("useAuth deve ser usado dentro de um AuthProvider")
+  }
+  return context
+}
 
 export const AuthProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  // Função para limpar tokens e estado
-  const clearAuthData = () => {
-    localStorage.removeItem("token");
-    sessionStorage.removeItem("token");
-    api.setAuthToken(null);
-    setCurrentUser(null);
-  };
-
+  // Verificar se há usuário logado no localStorage ao inicializar
   useEffect(() => {
-    const checkAuth = async () => {
+    const checkAuthState = () => {
       try {
-        const token =
-          localStorage.getItem("token") || sessionStorage.getItem("token");
+        const storedUser = localStorage.getItem("currentUser")
+        const isLoggedIn = localStorage.getItem("isLoggedIn")
 
-        if (token) {
-          if (process.env.REACT_APP_MODE === "demo") {
-            // Modo demo: usuário fixo
-            setCurrentUser({
-              id: "1",
-              name: "Usuário Teste",
-              email: "usuario@teste.com",
-            });
-            api.setAuthToken(token);
-          } else {
-            api.setAuthToken(token);
-            const response = await api.get("/auth/me");
-            setCurrentUser(response.data);
-          }
-        } else {
-          setCurrentUser(null);
+        if (storedUser && isLoggedIn === "true") {
+          setCurrentUser(JSON.parse(storedUser))
         }
-      } catch (apiError) {
-        console.error("Erro ao obter dados do usuário:", apiError);
-        clearAuthData();
+      } catch (error) {
+        console.error("Erro ao verificar estado de autenticação:", error)
+        // Limpar dados corrompidos
+        localStorage.removeItem("currentUser")
+        localStorage.removeItem("isLoggedIn")
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    checkAuth();
-  }, []);
+    checkAuthState()
+  }, [])
 
-  /**
-   * Realiza login do usuário
-   * @param {string} email
-   * @param {string} password
-   * @param {boolean} rememberMe
-   */
   const login = async (email, password, rememberMe = false) => {
+    setLoading(true)
     try {
-      setError(null);
+      // Simular chamada de API
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      if (process.env.REACT_APP_MODE === "demo") {
-        const mockUser = {
+      // Simular validação (substitua pela lógica real)
+      if (email && password) {
+        const userData = {
           id: "1",
-          name: "Usuário Teste",
-          email,
-        };
-        const mockToken = "mock-jwt-token";
+          email: email,
+          name: "Carlos Gomes",
+          role: "cuidador",
+        }
 
-        if (rememberMe) localStorage.setItem("token", mockToken);
-        else sessionStorage.setItem("token", mockToken);
+        setCurrentUser(userData)
+        localStorage.setItem("currentUser", JSON.stringify(userData))
+        localStorage.setItem("isLoggedIn", "true")
 
-        api.setAuthToken(mockToken);
-        setCurrentUser(mockUser);
-        return mockUser;
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", "true")
+        }
+
+        return userData
+      } else {
+        throw new Error("Credenciais inválidas")
       }
-
-      const response = await api.post("/auth/login", { email, password });
-      const { user, token } = response.data;
-
-      if (rememberMe) localStorage.setItem("token", token);
-      else sessionStorage.setItem("token", token);
-
-      api.setAuthToken(token);
-      setCurrentUser(user);
-
-      if (!user) clearAuthData();
-
-      return user;
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao fazer login";
-      console.error("Erro ao fazer login:", msg);
-      setError(msg);
-      throw err;
+    } catch (error) {
+      console.error("Erro no login:", error)
+      throw error
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
-  const register = async (name, email, password) => {
+  const register = async (userData) => {
+    setLoading(true)
     try {
-      setError(null);
+      // Simular chamada de API
+      await new Promise((resolve) => setTimeout(resolve, 1000))
 
-      if (process.env.REACT_APP_MODE === "demo") {
-        return { id: "1", name, email };
+      const newUser = {
+        id: Date.now().toString(),
+        ...userData,
+        role: "cuidador",
       }
 
-      const response = await api.post("/auth/register", { name, email, password });
-      return response.data;
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao registrar";
-      console.error("Erro ao registrar:", msg);
-      setError(msg);
-      throw err;
+      setCurrentUser(newUser)
+      localStorage.setItem("currentUser", JSON.stringify(newUser))
+      localStorage.setItem("isLoggedIn", "true")
+
+      return newUser
+    } catch (error) {
+      console.error("Erro no registro:", error)
+      throw error
+    } finally {
+      setLoading(false)
     }
-  };
+  }
 
   const logout = async () => {
     try {
-      clearAuthData();
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao fazer logout";
-      console.error("Erro ao fazer logout:", msg);
-      setError(msg);
-      throw err;
+      setCurrentUser(null)
+      localStorage.removeItem("currentUser")
+      localStorage.removeItem("isLoggedIn")
+      localStorage.removeItem("rememberMe")
+
+      // Limpar outros dados relacionados se necessário
+      localStorage.removeItem("medications")
+      localStorage.removeItem("events")
+    } catch (error) {
+      console.error("Erro no logout:", error)
     }
-  };
-
-  const resetPassword = async (email) => {
-    try {
-      setError(null);
-      if (process.env.REACT_APP_MODE === "demo") {
-        return { success: true };
-      }
-      const response = await api.post("/auth/reset-password", { email });
-      return response.data;
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao solicitar redefinição de senha";
-      console.error("Erro ao solicitar redefinição de senha:", msg);
-      setError(msg);
-      throw err;
-    }
-  };
-
-  const confirmPasswordReset = async (token, newPassword) => {
-    try {
-      setError(null);
-      if (process.env.REACT_APP_MODE === "demo") {
-        return { success: true };
-      }
-      const response = await api.post("/auth/confirm-reset-password", {
-        token,
-        password: newPassword,
-      });
-      return response.data;
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao confirmar redefinição de senha";
-      console.error("Erro ao confirmar redefinição de senha:", msg);
-      setError(msg);
-      throw err;
-    }
-  };
-
-  const updateProfile = async (userData) => {
-    try {
-      setError(null);
-      if (!currentUser) throw new Error("Usuário não autenticado");
-
-      if (process.env.REACT_APP_MODE === "demo") {
-        const updatedUser = { ...currentUser, ...userData };
-        setCurrentUser(updatedUser);
-        return updatedUser;
-      }
-
-      const response = await api.put("/auth/profile", userData);
-      const updatedUser = response.data;
-      setCurrentUser(updatedUser);
-      return updatedUser;
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao atualizar perfil";
-      console.error("Erro ao atualizar perfil:", msg);
-      setError(msg);
-      throw err;
-    }
-  };
-
-  const changePassword = async (currentPassword, newPassword) => {
-    try {
-      setError(null);
-      if (!currentUser) throw new Error("Usuário não autenticado");
-
-      if (process.env.REACT_APP_MODE === "demo") {
-        return { success: true };
-      }
-
-      const response = await api.post("/auth/change-password", {
-        currentPassword,
-        newPassword,
-      });
-      return response.data;
-    } catch (err) {
-      const msg =
-        err.response?.data?.message || err.message || "Falha ao alterar senha";
-      console.error("Erro ao alterar senha:", msg);
-      setError(msg);
-      throw err;
-    }
-  };
+  }
 
   const value = {
     currentUser,
+    user: currentUser, // Alias para compatibilidade
     loading,
-    error,
     login,
     register,
     logout,
-    resetPassword,
-    confirmPasswordReset,
-    updateProfile,
-    changePassword,
-  };
+  }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-};
-
-export default AuthProvider;
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
