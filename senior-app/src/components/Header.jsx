@@ -1,9 +1,14 @@
+"use client"
+
+import { useState } from "react"
 import { Link } from "react-router-dom"
 import { useTheme } from "../contexts/ThemeContext"
 import NotificationCenter from "./NotificationCenter"
+import ChatModal from "./ChatModal"
 import "../styles/Header.css"
 
 function Header({ toggleSidebar }) {
+  const [isChatOpen, setIsChatOpen] = useState(false)
   const { darkMode, toggleDarkMode } = useTheme()
 
   return (
@@ -27,6 +32,7 @@ function Header({ toggleSidebar }) {
           <h1 className="logo">Senior+</h1>
         </Link>
       </div>
+
       <div className="header-actions">
         <button
           className="theme-toggle"
@@ -73,12 +79,33 @@ function Header({ toggleSidebar }) {
             </svg>
           )}
         </button>
+
         <NotificationCenter />
+
+        <button className="chat-button" onClick={() => setIsChatOpen(true)} title="Chat com o idoso">
+          <svg
+            className="chat-icon"
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+          </svg>
+        </button>
+
         <div className="avatar" onClick={toggleSidebar}>
           <img src="/placeholder.svg?height=40&width=40" alt="Foto do cuidador" />
           <div className="avatar-fallback">CG</div>
         </div>
       </div>
+
+      <ChatModal isOpen={isChatOpen} onClose={() => setIsChatOpen(false)} />
     </header>
   )
 }
