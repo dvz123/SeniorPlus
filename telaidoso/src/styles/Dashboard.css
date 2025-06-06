@@ -1,0 +1,39 @@
+.dashboard-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px; /* Espaço entre colunas e seção do calendário */
+  padding: 40px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center; /* Centraliza o conteúdo horizontalmente */
+  justify-content: center;
+}
+
+/* Container para as colunas lado a lado */
+.columns-container {
+  display: flex;
+  justify-content: center; /* Centraliza as colunas no meio */
+  gap: 30px;
+  flex-wrap: wrap; /* Mantém responsividade */
+  width: 100%;
+}
+
+/* Coluna da esquerda (Painel Principal) */
+.left-column {
+  width: auto;
+}
+
+/* Coluna da direita (Eventos + Medicamentos) */
+.right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: auto;
+}
+
+/* Nova seção do Calendário e Agenda */
+.calendario-section {
+  width: 100%;
+  max-width: 1200px;
+  margin-right: 3rem;
+}
