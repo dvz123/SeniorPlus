@@ -30,7 +30,7 @@
 
 /* Cabeçalho do Chat */
 .chat-header {
-  background: linear-gradient(135deg, #0aa174, #0596686e);
+  background: #0aa174;
   color: #ffffff;
   padding: 16px 20px;
   display: flex;
@@ -146,8 +146,8 @@
 }
 
 .chat-message.sent .message-bubble {
-  background: linear-gradient(135deg, #0aa174, #059669);
-  color: #ffffff;
+  background: #dcfce7;
+  color: #000;
   border-bottom-right-radius: 6px;
 }
 
