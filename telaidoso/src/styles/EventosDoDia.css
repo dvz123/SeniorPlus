@@ -1,0 +1,102 @@
+.eventos-container {
+  width: 450px;
+  background-color: var(--bg-primary);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  max-height: 250px; /* Altura máxima do container */
+}
+
+/* Cabeçalho */
+.eventos-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #00b170;
+  margin-bottom: 16px;
+}
+
+.eventos-header svg {
+  width: 35px;
+  height: 35px;
+}
+
+/* Lista de eventos com rolagem */
+.eventos-body {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-right: 4px;
+}
+
+/* Cartões de eventos */
+.evento-card1 {
+  padding: 12px 16px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  border: 1px solid var(--borderchat);
+}
+
+.evento-card1.concluido {
+  background-color: var(--bg-concluido);
+}
+
+.evento-hora {
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.evento-descricao {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.evento-status {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+}
+
+.evento-status span {
+  background-color: #e0e0e0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+.evento-card1.concluido .evento-status span {
+  background-color: #16c784;
+  color: white;
+}
+
+.evento-card1.pendente .evento-status span {
+  background-color: #fbc02d;
+  color: white;
+}
+
+/* Scroll personalizado */
+.eventos-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.eventos-body::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.eventos-body::-webkit-scrollbar-thumb {
+  background-color: #0aa174;
+  border-radius: 10px;
+}
+
+.eventos-body::-webkit-scrollbar-thumb:hover {
+  background-color: #0aa174;
+}
