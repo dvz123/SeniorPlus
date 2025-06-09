@@ -113,7 +113,25 @@ function Configuracoes() {
         <div className="settings-container">
           <div className="settings-section">
             <h2>Aparência</h2>
+
             <div className="settings-card">
+
+              <div className="settings-option">
+                <div className="settings-option-info">
+                  <div className="settings-option-label">Tela do Paciente</div>
+                  <div className="settings-option-description">
+                    Veja como o idoso visualiza o sistema, com informações simplificadas e acessíveis.
+                  </div>
+                </div>
+                <div className="settings-option-control">
+                  <a href="http://localhost:3001">
+                    <button className="settings-button" onClick={handleExportData}>
+                      Tela do Paciente
+                    </button>
+                  </a>
+                </div>
+              </div>
+
               <div className="settings-option">
                 <div className="settings-option-info">
                   <div className="settings-option-label">Modo Escuro</div>

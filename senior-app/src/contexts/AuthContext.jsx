@@ -39,40 +39,64 @@ export const AuthProvider = ({ children }) => {
     checkAuthState()
   }, [])
 
-  const login = async (email, password, rememberMe = false) => {
-    setLoading(true)
-    try {
-      // Simular chamada de API
-      await new Promise((resolve) => setTimeout(resolve, 1000))
+const login = async (email, password, rememberMe = false) => {
+  setLoading(true)
+  try {
+    const response = await fetch("http://localhost:8080/api/v1/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email,
+        senha: password,
+      }),
+    })
 
-      // Simular validação (substitua pela lógica real)
-      if (email && password) {
-        const userData = {
-          id: "1",
-          email: email,
-          name: "Carlos Gomes",
-          role: "cuidador",
-        }
-
-        setCurrentUser(userData)
-        localStorage.setItem("currentUser", JSON.stringify(userData))
-        localStorage.setItem("isLoggedIn", "true")
-
-        if (rememberMe) {
-          localStorage.setItem("rememberMe", "true")
-        }
-
-        return userData
-      } else {
-        throw new Error("Credenciais inválidas")
-      }
-    } catch (error) {
-      console.error("Erro no login:", error)
-      throw error
-    } finally {
-      setLoading(false)
+    if (!response.ok) {
+      throw new Error("Falha ao fazer login")
     }
+
+    const data = await response.json()
+
+    if (data && data.token) {
+      const token = data.token
+
+      // ✅ Salvar o token no localStorage
+      localStorage.setItem("authToken", token)
+
+      // ✅ Buscar dados do usuário com o token
+      const userResponse = await fetch("http://localhost:8080/api/v1/auth/conta", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+
+      if (!userResponse.ok) {
+        throw new Error("Erro ao buscar dados do usuário")
+      }
+
+      const userData = await userResponse.json()
+
+      setCurrentUser(userData)
+      localStorage.setItem("currentUser", JSON.stringify(userData))
+      localStorage.setItem("isLoggedIn", "true")
+
+      if (rememberMe) {
+        localStorage.setItem("rememberMe", "true")
+      }
+
+      return userData
+    } else {
+      throw new Error("Credenciais inválidas")
+    }
+  } catch (error) {
+    console.error("Erro no login:", error)
+    throw error
+  } finally {
+    setLoading(false)
   }
+}
 
   const register = async (userData) => {
     setLoading(true)

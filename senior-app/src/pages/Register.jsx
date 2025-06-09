@@ -6,6 +6,7 @@ import "../styles/Auth.css"
 
 function Register() {
   const [name, setName] = useState("")
+  const [cpf, setCpf] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
@@ -20,7 +21,7 @@ function Register() {
     setError("")
 
     // Validações
-    if (!name || !email || !password || !confirmPassword) {
+    if (!name || !email || !password || !confirmPassword || !cpf) {
       setError("Por favor, preencha todos os campos.")
       return
     }
@@ -38,10 +39,29 @@ function Register() {
     setIsLoading(true)
 
     try {
-      // Simulação de registro para desenvolvimento
-      setTimeout(() => {
-        navigate("/login")
-      }, 1000)
+    
+      const response = await fetch("http://localhost:8080/api/v1/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nome: name,
+          cpf,
+          email,
+          senha: password,
+          role: "ROLE_ADMIN"
+        }),
+      })
+
+      if (!response.ok) {
+        const data = await response.json()
+        setError(data.error || "Erro ao registrar. Tente novamente.")
+        return
+      }
+
+      // Registro bem-sucedido, redireciona para a página de login
+      navigate("/login")
     } catch (error) {
       setError("Falha ao registrar. Tente novamente.")
     } finally {
@@ -135,6 +155,52 @@ function Register() {
                 placeholder="Seu nome completo"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                required
+                className="auth-input"
+              />
+            </div>
+          </div>
+
+          <div className="auth-form-group">
+            <label htmlFor="cpf">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              Cpf
+            </label>
+            <div className="auth-input-wrapper">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="auth-input-icon"
+              >
+                <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+                <circle cx="12" cy="7" r="4" />
+              </svg>
+              <input
+                type="text"
+                id="cpf"
+                placeholder="Cpf (apenas números)"
+                value={cpf}
+                onChange={(e) => setCpf(e.target.value)}
                 required
                 className="auth-input"
               />

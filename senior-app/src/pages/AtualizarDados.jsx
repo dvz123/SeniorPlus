@@ -1,282 +1,198 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Link } from "react-router-dom"
-import { useUser } from "../contexts/UserContext"
-import { useToast } from "../contexts/ToastContext"
 import "../styles/AtualizarDados.css"
 
 function AtualizarDados() {
-  const { elderlyData, updateElderlyData } = useUser()
-  const { showSuccess } = useToast()
   const [formData, setFormData] = useState({
-    name: "",
-    id: "",
-    age: "",
-    bloodType: "",
-    maritalStatus: "",
-    address: "",
-    phone: "",
-    emergencyContact: "",
-    allergies: [],
-    medicalConditions: [],
+    cpf: "",
+    rg: "",
+    nome: "",
+    email: "",
+    dataNascimento: "",
+    telefone: "",
+    peso: "",
+    altura: "",
+    tipoSanguineo: "",
+    observacao: "",
+    imc: null,
   })
-  const [newAllergy, setNewAllergy] = useState("")
-  const [newCondition, setNewCondition] = useState("")
 
-  useEffect(() => {
-    if (elderlyData) {
-      setFormData(elderlyData)
-    }
-  }, [elderlyData])
+  const [mensagem, setMensagem] = useState("")
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
-    })
+    }))
   }
 
-  const handleAddAllergy = () => {
-    if (newAllergy.trim() !== "") {
-      setFormData({
-        ...formData,
-        allergies: [...formData.allergies, newAllergy.trim()],
-      })
-      setNewAllergy("")
-    }
+  const calcularIMC = (peso, altura) => {
+    const p = parseFloat(peso)
+    const a = parseFloat(altura)
+    if (p && a) return (p / (a * a)).toFixed(2)
+    return null
   }
 
-  const handleRemoveAllergy = (index) => {
-    const updatedAllergies = [...formData.allergies]
-    updatedAllergies.splice(index, 1)
-    setFormData({
-      ...formData,
-      allergies: updatedAllergies,
-    })
-  }
-
-  const handleAddCondition = () => {
-    if (newCondition.trim() !== "") {
-      setFormData({
-        ...formData,
-        medicalConditions: [...formData.medicalConditions, newCondition.trim()],
-      })
-      setNewCondition("")
-    }
-  }
-
-  const handleRemoveCondition = (index) => {
-    const updatedConditions = [...formData.medicalConditions]
-    updatedConditions.splice(index, 1)
-    setFormData({
-      ...formData,
-      medicalConditions: updatedConditions,
-    })
-  }
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    updateElderlyData(formData)
-    showSuccess("Dados atualizados com sucesso!")
+
+    const dados = {
+      ...formData,
+      peso: parseFloat(formData.peso),
+      altura: parseFloat(formData.altura),
+      imc: calcularIMC(formData.peso, formData.altura),
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/api/v1/idoso", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + localStorage.getItem("authToken"), // substitua com token real
+        },
+        body: JSON.stringify(dados),
+      })
+
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar dados")
+      }
+
+      setMensagem("Dados atualizados com sucesso!")
+    } catch (error) {
+      setMensagem("Erro ao atualizar dados.")
+      console.error(error)
+    }
   }
 
   return (
     <div className="container">
       <main className="main">
         <Link to="/" className="back-button">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="m12 19-7-7 7-7" />
-            <path d="M19 12H5" />
-          </svg>
-          Voltar
+          ← Voltar
         </Link>
 
         <div className="page-header">
           <h1>Atualizar Dados do Idoso</h1>
-          <p>Atualize as informações pessoais e médicas do paciente.</p>
+          <p>Preencha os campos abaixo com as informações do paciente.</p>
         </div>
 
-        <div className="update-form">
-          <form onSubmit={handleSubmit}>
-            <div className="form-section">
-              <h2>Informações Pessoais</h2>
-              <div className="form-grid">
-                <div className="form-group">
-                  <label htmlFor="name">Nome Completo</label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name || ""}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="id">ID</label>
-                  <input
-                    type="text"
-                    id="id"
-                    name="id"
-                    value={formData.id || ""}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="age">Idade</label>
-                  <input
-                    type="number"
-                    id="age"
-                    name="age"
-                    value={formData.age || ""}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="bloodType">Tipo Sanguíneo</label>
-                  <select
-                    id="bloodType"
-                    name="bloodType"
-                    value={formData.bloodType || ""}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Selecione</option>
-                    <option value="A+">A+</option>
-                    <option value="A-">A-</option>
-                    <option value="B+">B+</option>
-                    <option value="B-">B-</option>
-                    <option value="AB+">AB+</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O+">O+</option>
-                    <option value="O-">O-</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="maritalStatus">Estado Civil</label>
-                  <select
-                    id="maritalStatus"
-                    name="maritalStatus"
-                    value={formData.maritalStatus || ""}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Solteiro(a)">Solteiro(a)</option>
-                    <option value="Casado(a)">Casado(a)</option>
-                    <option value="Divorciado(a)">Divorciado(a)</option>
-                    <option value="Viúvo(a)">Viúvo(a)</option>
-                  </select>
-                </div>
-                <div className="form-group full-width">
-                  <label htmlFor="address">Endereço</label>
-                  <input
-                    type="text"
-                    id="address"
-                    name="address"
-                    value={formData.address || ""}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="phone">Telefone</label>
-                  <input
-                    type="text"
-                    id="phone"
-                    name="phone"
-                    value={formData.phone || ""}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="emergencyContact">Contato de Emergência</label>
-                  <input
-                    type="text"
-                    id="emergencyContact"
-                    name="emergencyContact"
-                    value={formData.emergencyContact || ""}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
+        <form className="update-form" onSubmit={handleSubmit}>
+          <div className="form-grid">
+            <div className="form-group">
+              <label htmlFor="cpf">CPF</label>
+              <input
+                type="text"
+                name="cpf"
+                value={formData.cpf}
+                onChange={handleChange}
+                required
+              />
             </div>
-
-            <div className="form-section">
-              <h2>Informações Médicas</h2>
-
-              <div className="form-subsection">
-                <h3>Alergias</h3>
-                <div className="tags-container">
-                  {formData.allergies?.map((allergy, index) => (
-                    <div key={index} className="tag">
-                      {allergy}
-                      <button type="button" className="remove-tag" onClick={() => handleRemoveAllergy(index)}>
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <div className="add-tag-container">
-                  <input
-                    type="text"
-                    value={newAllergy}
-                    onChange={(e) => setNewAllergy(e.target.value)}
-                    placeholder="Adicionar alergia"
-                  />
-                  <button type="button" className="add-tag-button" onClick={handleAddAllergy}>
-                    Adicionar
-                  </button>
-                </div>
-              </div>
-
-              <div className="form-subsection">
-                <h3>Condições Médicas</h3>
-                <div className="tags-container">
-                  {formData.medicalConditions?.map((condition, index) => (
-                    <div key={index} className="tag">
-                      {condition}
-                      <button type="button" className="remove-tag" onClick={() => handleRemoveCondition(index)}>
-                        &times;
-                      </button>
-                    </div>
-                  ))}
-                </div>
-                <div className="add-tag-container">
-                  <input
-                    type="text"
-                    value={newCondition}
-                    onChange={(e) => setNewCondition(e.target.value)}
-                    placeholder="Adicionar condição médica"
-                  />
-                  <button type="button" className="add-tag-button" onClick={handleAddCondition}>
-                    Adicionar
-                  </button>
-                </div>
-              </div>
+            <div className="form-group">
+              <label htmlFor="rg">RG</label>
+              <input
+                type="text"
+                name="rg"
+                value={formData.rg}
+                onChange={handleChange}
+                required
+              />
             </div>
-
-            <div className="form-actions">
-              <button type="submit" className="save-button">
-                Salvar Alterações
-              </button>
+            <div className="form-group">
+              <label htmlFor="nome">Nome</label>
+              <input
+                type="text"
+                name="nome"
+                value={formData.nome}
+                onChange={handleChange}
+                required
+              />
             </div>
-          </form>
-        </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="dataNascimento">Data de Nascimento</label>
+              <input
+                type="date"
+                name="dataNascimento"
+                value={formData.dataNascimento}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="telefone">Telefone</label>
+              <input
+                type="text"
+                name="telefone"
+                value={formData.telefone}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="peso">Peso (kg)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="peso"
+                value={formData.peso}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="altura">Altura (m)</label>
+              <input
+                type="number"
+                step="0.01"
+                name="altura"
+                value={formData.altura}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="tipoSanguineo">Tipo Sanguíneo</label>
+              <select
+                name="tipoSanguineo"
+                value={formData.tipoSanguineo}
+                onChange={handleChange}
+              >
+                <option value="">Selecione</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </div>
+            <div className="form-group full-width">
+              <label htmlFor="observacao">Observações</label>
+              <textarea
+                name="observacao"
+                rows="3"
+                value={formData.observacao}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          <div className="form-actions">
+            <button type="submit" className="save-button">
+              Salvar Alterações
+            </button>
+          </div>
+        </form>
+
+        {mensagem && <p className="mensagem">{mensagem}</p>}
       </main>
     </div>
   )

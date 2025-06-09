@@ -31,8 +31,12 @@ const Header = () => {
 
         {/* Desktop CTA */}
         <div className="nav-desktop">
-          <button className="btn btn-ghost">Entrar</button>
-          <button className="btn btn-primary">Teste Grátis</button>
+          <a href="http://localhost:3000/login">
+            <button className="btn btn-ghost">Entrar</button>
+          </a>
+          <a href="http://localhost:3000/registrar">
+            <button className="btn btn-primary">Teste Grátis</button>
+          </a>
         </div>
 
         {/* Mobile Menu Button */}

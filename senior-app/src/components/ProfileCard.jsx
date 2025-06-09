@@ -1,14 +1,79 @@
-import { useUser } from "../contexts/UserContext";
+import { useEffect, useState } from "react";
 import "../styles/ProfileCard.css";
 
 function ProfileCard() {
-  const { elderlyData } = useUser();
+  const [elderlyData, setElderlyData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  if (!elderlyData) {
+  useEffect(() => {
+    async function fetchElderlyData() {
+      try {
+        const token = localStorage.getItem("authToken"); // Certifique-se de que o token está salvo como 'token'
+        if (!token) throw new Error("Token não encontrado no localStorage");
+
+        const response = await fetch("http://localhost:8080/api/v1/idoso/informacoesIdoso", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Erro ao buscar dados do idoso");
+        }
+
+        const data = await response.json();
+
+        const birthDate = new Date(data.dataNascimento);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const hasHadBirthday = today.getMonth() > birthDate.getMonth() ||
+          (today.getMonth() === birthDate.getMonth() && today.getDate() >= birthDate.getDate());
+
+        const finalAge = hasHadBirthday ? age : age - 1;
+
+        setElderlyData({
+          id: data.cpf || "000",
+          name: data.nome || "Sem nome",
+          email: data.email,
+          phone: data.telefone,
+          photoUrl: "", // Adicione um campo se houver foto
+          bloodType: data.tipoSanguineo,
+          maritalStatus: data.estadoCivil || "Não informado",
+          weight: data.peso,
+          height: data.altura,
+          birthDate: data.dataNascimento,
+          observation: data.observacao,
+          imc: data.imc,
+          age: finalAge,
+          allergies: data.alergias || "",
+        });
+      } catch (error) {
+        console.error("Erro:", error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchElderlyData();
+  }, []);
+
+  if (loading) {
     return (
       <div className="profile-card loading">
         <div className="profile-header">
           <p>Carregando dados do idoso...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!elderlyData) {
+    return (
+      <div className="profile-card error">
+        <div className="profile-header">
+          <p>Cadastre os dados do idoso.</p>
         </div>
       </div>
     );
@@ -79,6 +144,14 @@ function ProfileCard() {
             ) : (
               <span className="profile-value">Nenhuma</span>
             )}
+          </div>
+          <div className="profile-item">
+            <span className="profile-label">IMC:</span>
+            <span className="profile-value">{elderlyData.imc || "Não calculado"}</span>
+          </div>
+          <div className="profile-item">
+            <span className="profile-label">Observações:</span>
+            <span className="profile-value">{elderlyData.observation || "Nenhuma"}</span>
           </div>
         </div>
       </div>

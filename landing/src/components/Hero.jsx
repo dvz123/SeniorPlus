@@ -26,10 +26,12 @@ const Hero = () => {
             </div>
 
             <div className="hero-buttons">
-              <button className="btn btn-primary btn-lg">
-                Começar agora
-                <ArrowRight className="ml-2" size={20} />
-              </button>
+              <a href="http://localhost:3000/registrar">
+                <button className="btn btn-primary btn-lg">
+                  Começar agora
+                  <ArrowRight className="ml-2" size={20} />
+                </button>
+              </a>
               <button className="btn btn-outline btn-lg">
                 <Play className="mr-2" size={20} />
                 Ver demonstração
